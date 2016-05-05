@@ -7,6 +7,28 @@
 .nav {
   margin-top: 5px;
 }
+
+tr:nth-child(even) {background-color: #f2f2f2}
+
+table {
+  border: 1px solid black;
+  table-layout: fixed;
+  width: 400px;
+}
+
+td {
+  padding: 15px;
+  border-left: 1px solid black;
+  width: auto;
+}
+.center {
+  margin-left: auto;
+  margin-right: auto;
+  width: 400px;
+  text-align: center;
+  display: block;
+  padding: 20px;
+}
 /*
  * This is a manifest file that'll be compiled into application.css, which will include all the files
  * listed below.
