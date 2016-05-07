@@ -5,6 +5,12 @@ Rails.application.routes.draw do
 
   devise_for :users
 
+  resources :users, only: [] do
+    member do
+      put :downgrade
+    end
+  end
+
   get 'about' => 'welcome#about'
 
   root 'welcome#index'

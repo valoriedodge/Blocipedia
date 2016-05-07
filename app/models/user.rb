@@ -8,4 +8,8 @@ class User < ActiveRecord::Base
   after_initialize { self.role ||= :standard}
 
   enum role: [:standard, :premium, :admin]
+
+  def downgrade(user)
+    user.standard!
+  end
 end
