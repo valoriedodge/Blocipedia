@@ -14,7 +14,6 @@ class WikisController < ApplicationController
   def create
     @wiki = Wiki.new
     @wiki.assign_attributes(wiki_params)
-
     if @wiki.save
       flash[:notice] = "\"#{@wiki.title}\" was created successfully."
       redirect_to @wiki
@@ -29,7 +28,7 @@ class WikisController < ApplicationController
   end
 
   def update
-    @wiki = Wiki.find(params[:id])
+    @wiki = Wiki.find(params[:id])    
     @wiki.assign_attributes(wiki_params)
 
     if @wiki.save
