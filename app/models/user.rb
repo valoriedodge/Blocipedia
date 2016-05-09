@@ -3,7 +3,7 @@ class User < ActiveRecord::Base
   # :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable, :confirmable,
          :recoverable, :rememberable, :trackable, :validatable
-  has_many :wikis
+  has_many :wikis, dependent: :destroy
   before_save {self.email = email.downcase}
   after_initialize { self.role ||= :standard}
 
@@ -11,5 +11,19 @@ class User < ActiveRecord::Base
 
   def downgrade(user)
     user.standard!
+    user.wikis.each do |wiki|
+      wiki.private = false
+      wiki.save!
+    end
   end
+
+  def authorize_user
+      wiki = Wiki.find(params[:id])
+
+      unless current_user == post.user || current_user.admin?
+          flash[:alert] = "You must be an admin to do that."
+          redirect_to wikis_path
+      end
+  end
+
 end

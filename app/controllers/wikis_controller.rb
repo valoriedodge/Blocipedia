@@ -1,10 +1,24 @@
 class WikisController < ApplicationController
+  before_action :require_sign_in, except: [:index, :show]
+
   def index
-    @wikis = Wiki.all
+    if current_user
+      @wikis = Wiki.visible_to(current_user)
+    else
+      @wikis = Wiki.where(private: false)
+    end
   end
 
   def show
     @wiki = Wiki.find(params[:id])
+    unless !@wiki.private
+      if current_user && (current_user.admin? || current_user.premium?)
+        @wiki = Wiki.find(params[:id])
+      else
+        flash[:alert] = "You must be authorized to view private wikis."
+        redirect_to wikis_path
+      end
+    end
   end
 
   def new
@@ -14,6 +28,8 @@ class WikisController < ApplicationController
   def create
     @wiki = Wiki.new
     @wiki.assign_attributes(wiki_params)
+    @wiki.user = current_user
+
     if @wiki.save
       flash[:notice] = "\"#{@wiki.title}\" was created successfully."
       redirect_to @wiki
@@ -25,10 +41,18 @@ class WikisController < ApplicationController
 
   def edit
     @wiki = Wiki.find(params[:id])
+    unless !@wiki.private
+      if current_user && (current_user.admin? || current_user.premium?)
+        @wiki = Wiki.find(params[:id])
+      else
+        flash[:alert] = "You must be authorized to edit private wikis."
+        redirect_to wikis_path
+      end
+    end
   end
 
   def update
-    @wiki = Wiki.find(params[:id])    
+    @wiki = Wiki.find(params[:id])
     @wiki.assign_attributes(wiki_params)
 
     if @wiki.save
@@ -55,7 +79,7 @@ class WikisController < ApplicationController
   private
 
   def wiki_params
-      params.require(:wiki).permit(:title, :body)
+      params.require(:wiki).permit(:title, :body, :private)
   end
 
 end

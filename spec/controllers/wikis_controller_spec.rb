@@ -3,8 +3,15 @@ require 'random_data'
 
 RSpec.describe WikisController, type: :controller do
 
+  let(:my_user) { User.create!(email: "user@example.com", password: "password")}
   let(:my_wiki) { Wiki.create!(title: "New Wiki Title", body: "New Wiki Body", private: false) }
+  let(:my_private_wiki) { Wiki.create!(title: "New Wiki Title", body: "New Wiki Body", private: true) }
 
+ context "standard user" do
+    before do
+        @user = User.create!(email: "user@bloccit.com", password: "helloworld", role: :standard)
+        new_user_session_path(@user)
+    end
   describe "GET #index" do
     it "returns http success" do
       get :index
@@ -124,8 +131,33 @@ RSpec.describe WikisController, type: :controller do
 
     it "redirects to the index view" do
       delete :destroy, id: my_wiki.id
-      expect(response).to render_template :index
+      expect(response).to redirect_to wikis_path
     end
   end
 
+  describe "scopes" do
+     before do
+       @user = User.new(email: "user@example.com", password: "password")
+       @public_wiki = Wiki.create!(title: RandomData.random_sentence, body: RandomData.random_paragraph, private: false, user: @user)
+       @private_wiki = Wiki.create!(title: RandomData.random_sentence, body: RandomData.random_paragraph, private: true, user: @user)
+     end
+
+     describe "visible_to(user)" do
+       it "returns all wikis if the user is premium" do
+         @user.premium!
+         expect(Wiki.visible_to(@user)).to eq(Wiki.all)
+       end
+
+       it "returns only public wikis if user is standard" do
+         @user.standard!
+         expect(Wiki.visible_to(@user)).to eq([@public_wiki])
+       end
+
+       it "does not return private wikis if user is standard" do
+         @user.standard!
+         expect(Wiki.visible_to(@user)).to_not eq([@private_wiki])
+       end
+     end
+   end
+ end
 end
