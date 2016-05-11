@@ -9,12 +9,10 @@ class User < ActiveRecord::Base
 
   enum role: [:standard, :premium, :admin]
 
-  def downgrade(user)
-    user.standard!
-    user.wikis.each do |wiki|
-      wiki.private = false
-      wiki.save!
-    end
+  def downgrade
+    self.standard!
+    self.wikis.each { |wiki| wiki.make_public }
+    save
   end
 
   def authorize_user

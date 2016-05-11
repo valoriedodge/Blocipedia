@@ -6,4 +6,9 @@ class Wiki < ActiveRecord::Base
 
   scope :visible_to, -> (user) { user.standard? ? where(private: false) : all }
 
+  def make_public
+    self.private = false
+    save
+  end
+
 end

@@ -1,9 +1,10 @@
 class ChargesController < ApplicationController
+  DEFAULT_AMOUNT = 15_00
   def new
     @stripe_btn_data = {
      key: "#{ Rails.configuration.stripe[:publishable_key] }",
      description: "Upgrade to Premium - #{current_user.email}",
-     amount: 15_00
+     amount: DEFAULT_AMOUNT
    }
   end
 
@@ -18,7 +19,7 @@ class ChargesController < ApplicationController
    # Where the real magic happens
    charge = Stripe::Charge.create(
      customer: customer.id, # Note -- this is NOT the user_id in your app
-     amount: 15_00,
+     amount: DEFAULT_AMOUNT,
      description: "Upgrade to Premium - #{current_user.email}",
      currency: 'usd'
    )
@@ -35,12 +36,12 @@ class ChargesController < ApplicationController
      redirect_to new_charge_path
  end
 
+ ##class Amount
+
+   ##def self.default
+     ##15_00
+   ##end
+
+ ##end
+
 end
-private
- class Amount
-
-   def default
-     15_00
-   end
-
- end

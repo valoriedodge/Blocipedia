@@ -40,10 +40,11 @@ class WikisController < ApplicationController
   end
 
   def edit
+
     @wiki = Wiki.find(params[:id])
     unless !@wiki.private
       if current_user && (current_user.admin? || current_user.premium?)
-        @wiki = Wiki.find(params[:id])
+        @body = Redcarpet::Markdown.new(Redcarpet::Render::HTML).render(@wiki.body)
       else
         flash[:alert] = "You must be authorized to edit private wikis."
         redirect_to wikis_path
