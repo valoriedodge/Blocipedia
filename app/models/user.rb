@@ -18,7 +18,7 @@ class User < ActiveRecord::Base
   def authorize_user
       wiki = Wiki.find(params[:id])
 
-      unless current_user == post.user || current_user.admin?
+      unless current_user == wiki.user || current_user.admin?
           flash[:alert] = "You must be an admin to do that."
           redirect_to wikis_path
       end

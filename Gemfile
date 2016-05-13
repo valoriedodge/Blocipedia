@@ -34,4 +34,5 @@ source 'https://rubygems.org'
    gem 'shoulda'
    gem 'faker'
    gem 'factory_girl_rails'
+   gem 'stripe-ruby-mock', '~> 2.2.4', :require => 'stripe_mock'
  end

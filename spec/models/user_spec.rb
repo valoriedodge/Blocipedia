@@ -93,15 +93,10 @@ RSpec.describe User, type: :model do
       let(:my_wiki) { Wiki.create!(title: "New Wiki Title", body: "New Wiki Body", private: false, user: my_user) }
       let(:my_private_wiki) { Wiki.create!(title: "New Wiki Title", body: "New Wiki Body", private: true, user: my_user) }
 
-      before do
-        user = my_user
-      end
-
       it "should change role from premium to standard" do
-          user = my_user
-          expect(user.role).to eq("premium")
-          user.downgrade(user)
-          expect(user.role).to eq("standard")
+          expect(my_user.role).to eq("premium")
+          my_user.downgrade
+          expect(my_user.role).to eq("standard")
       end
 
       #it "returns only public wikis if user is standard" do
@@ -111,13 +106,14 @@ RSpec.describe User, type: :model do
 
       it "changes private wikis to public" do
         expect(my_private_wiki.private).to be(true)
-        user.downgrade(user)
+        my_user.downgrade
+        my_private_wiki.reload
         expect(my_private_wiki.private).to be(false)
       end
 
       it "keeps public wikis public" do
         expect(my_wiki.private).to be(false)
-        user.downgrade(user)
+        user.downgrade
         expect(my_wiki.private).to be(false)
       end
 

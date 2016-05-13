@@ -3,7 +3,8 @@ require 'random_data'
 
 RSpec.describe WikisController, type: :controller do
 
-  let(:my_user) { User.create!(email: "my_user@example.com", password: "password")}
+  let(:my_user) { FactoryGirl.create(:user)}
+  #let(:my_user) { User.create!(email: "my_user@example.com", password: "password")}
   let(:my_wiki) { Wiki.create!(title: "New Wiki Title", body: "New Wiki Body", private: false) }
   let(:my_private_wiki) { Wiki.create!(title: "New Wiki Title", body: "New Wiki Body", private: true) }
 
@@ -96,6 +97,7 @@ RSpec.describe WikisController, type: :controller do
         @request.env["devise.mapping"] = Devise.mappings[:user]
         sign_in user
     end
+
   describe "GET #index" do
     it "returns http success" do
       get :index
@@ -202,7 +204,7 @@ RSpec.describe WikisController, type: :controller do
       new_body = RandomData.random_paragraph
 
       put :update, id: my_wiki.id, wiki: {title: new_title, body: new_body}
-      expect(response).to redirect_to my_wiki
+      expect(response).to have_http_status(:success)
     end
   end
 
