@@ -3,14 +3,98 @@ require 'random_data'
 
 RSpec.describe WikisController, type: :controller do
 
-  let(:my_user) { User.create!(email: "user@example.com", password: "password")}
+  let(:my_user) { User.create!(email: "my_user@example.com", password: "password")}
   let(:my_wiki) { Wiki.create!(title: "New Wiki Title", body: "New Wiki Body", private: false) }
   let(:my_private_wiki) { Wiki.create!(title: "New Wiki Title", body: "New Wiki Body", private: true) }
 
+  context "guest user" do
+   describe "GET #index" do
+     it "returns http success" do
+       get :index
+       expect(response).to have_http_status(:success)
+     end
+
+     it "renders the #index view" do
+       get :index
+       expect(response).to render_template :index
+     end
+
+     it "assigns wiki to @wikis" do
+       get :index
+       expect(assigns(:wikis)).to eq([my_wiki])
+     end
+   end
+
+   describe "GET #show" do
+     it "returns http success" do
+       get :show, id: my_wiki.id
+       expect(response).to have_http_status(:success)
+     end
+
+     it "renders the #show view" do
+       get :show, id: my_wiki.id
+       expect(response).to render_template :show
+     end
+
+     it "assigns wiki to @wikis" do
+       get :show, id: my_wiki.id
+       expect(assigns(:wiki)).to eq(my_wiki)
+     end
+   end
+
+   describe "GET new" do
+        it "returns http redirect" do
+            get :new
+            expect(response).to redirect_to(new_user_session_path)
+        end
+    end
+
+    describe "POST create" do
+        it "returns http redirect" do
+            post :create, wiki: {title: RandomData.random_sentence, body: RandomData.random_paragraph}
+            expect(response).to redirect_to(new_user_session_path)
+        end
+    end
+
+    describe "GET edit" do
+        it "returns http redirect" do
+            get :edit, {id: my_wiki.id}
+            expect(response).to redirect_to(new_user_session_path)
+        end
+    end
+
+    describe "PUT update" do
+        it "returns http redirect" do
+            new_title = RandomData.random_sentence
+            new_body = RandomData.random_paragraph
+
+            put :update, id: my_wiki.id, wiki: {title: new_title, body: new_body }
+            expect(response).to redirect_to(new_user_session_path)
+        end
+    end
+
+    describe "DELETE destroy" do
+        it "returns http redirect" do
+            delete :destroy, {id: my_wiki.id}
+            expect(response).to redirect_to(new_user_session_path)
+        end
+    end
+
+    it "does not include private wikis in @wikis" do
+        get :index
+        expect(assigns(:wikis)).not_to include(my_private_wiki)
+    end
+
+  end
+
  context "standard user" do
     before do
-        @user = User.create!(email: "user@bloccit.com", password: "helloworld", role: :standard)
-        new_user_session_path(@user)
+        #user = User.create!(email: "user@bloccit.com", password: "helloworld", role: :standard)
+        user = my_user
+        user.confirmed_at = Time.zone.now
+        user.save
+        @request.env["devise.mapping"] = Devise.mappings[:user]
+        sign_in user
     end
   describe "GET #index" do
     it "returns http success" do
