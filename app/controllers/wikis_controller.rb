@@ -57,11 +57,10 @@ class WikisController < ApplicationController
 
     if @wiki.save
       flash[:notice] = "\"#{@wiki.title}\" was updated successfully."
-      redirect_to @wiki
     else
       flash.now[:alert] = "There was an error updating the wiki."
-      render :edit
     end
+    render :edit
   end
 
   def destroy

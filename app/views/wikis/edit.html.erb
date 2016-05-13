@@ -14,8 +14,11 @@
       <% if current_user && @wiki.user == current_user %>
         <%= render partial: 'form', locals: { f: f, wiki: @wiki } %>
       <% end %>
+      <p>*You can use markdown in your wiki.</br>
+      <small><a href="http://daringfireball.net/projects/markdown/" target="_blank"> Markdown Syntax </a></small> </p>
       <div class="form-group">
         <%= f.submit "Save", class: 'btn btn-success' %>
+        <%= link_to "Back to Wikis", wikis_path, class: 'btn' %>
       </div>
     <% end %>
   </div>
@@ -24,11 +27,11 @@
     <%= form_for @wiki do |f| %>
       <div class="form-group">
         <%= f.label :title %>
-        <%= f.text_field :title, class: 'form-control', placeholder: "Title Preview" %>
+        <%= markdown(@wiki.title) %>
       </div>
       <div class="form-group">
         <%= f.label :body %>
-        <%= f.text_area :body, rows: 8, class: 'form-control', placeholder: "Body Preview" %>
+        <%= markdown(@wiki.body) %>
       </div>
     <% end %>
   </div>
