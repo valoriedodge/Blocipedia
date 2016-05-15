@@ -3,9 +3,12 @@ class User < ActiveRecord::Base
   # :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable, :confirmable,
          :recoverable, :rememberable, :trackable, :validatable
-  has_many :wikis, dependent: :destroy
-  has_many :collaborators
-  has_many :wikis, through: :collaborators
+
+  has_many :created_wikis, dependent: :destroy, class_name: "Wiki"
+
+  has_many :collaborations
+  has_many :collaborating_wikis, through: :collaborations, class_name: "Wiki"
+
   before_save {self.email = email.downcase}
   after_initialize { self.role ||= :standard}
 

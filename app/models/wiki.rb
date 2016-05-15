@@ -1,7 +1,8 @@
 class Wiki < ActiveRecord::Base
-  belongs_to :user
-  has_many :collaborators
-  has_many :users, through: :collaborators
+  belongs_to :creator, class_name: "User"
+
+  has_many :collaborations
+  has_many :collaborators, through: :collaborations, class_name: "Wiki", source:
   validates :title, length: { minimum: 5 }, presence: true
   validates :body, length: { minimum: 10 }, presence: true
   after_initialize { self.private ||= false}

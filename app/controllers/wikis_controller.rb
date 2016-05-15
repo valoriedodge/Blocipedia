@@ -13,7 +13,7 @@ class WikisController < ApplicationController
   def show
     @wiki = Wiki.find(params[:id])
     unless !@wiki.private
-      if (current_user.admin? || @wiki.collaborators.include?(current_user)
+      if (current_user.admin? || @wiki.collaborators.include?(current_user))
         @wiki = Wiki.find(params[:id])
       else
         flash[:alert] = "You must be authorized to view private wikis."
