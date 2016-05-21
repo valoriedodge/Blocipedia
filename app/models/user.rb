@@ -7,7 +7,7 @@ class User < ActiveRecord::Base
   has_many :created_wikis, dependent: :destroy, class_name: "Wiki"
 
   has_many :collaborations
-  has_many :collaborating_wikis, through: :collaborations, class_name: "Wiki"
+  has_many :collaborating_wikis, through: :collaborations, class_name: "Wiki", source: :wiki
 
   before_save {self.email = email.downcase}
   after_initialize { self.role ||= :standard}
@@ -16,14 +16,14 @@ class User < ActiveRecord::Base
 
   def downgrade
     self.standard!
-    self.wikis.each { |wiki| wiki.make_public }
+    self.created_wikis.each { |wiki| wiki.make_public }
     save
   end
 
   def authorize_user
       wiki = Wiki.find(params[:id])
 
-      unless current_user == wiki.user || current_user.admin?
+      unless current_user == wiki.creator || current_user.admin?
           flash[:alert] = "You must be an admin to do that."
           redirect_to wikis_path
       end

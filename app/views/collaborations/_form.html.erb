@@ -1,0 +1,10 @@
+<div class="form-group">
+  <%= label_tag "Collaborators" %>
+
+  <%= render partial: "collaborations/list", locals: { collaborators: @wiki.collaborators } %>
+
+  <%= text_field_tag 'collaborator_email',
+                nil,
+                class: 'form-control',
+                placeholder: "Add a wiki collaborator by email" %>
+</div>

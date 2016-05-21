@@ -11,9 +11,11 @@
          <%= f.text_area :body, rows: 8, class: 'form-control', placeholder: "Enter wiki body" %>
        </div>
 
-       <% if current_user %>
-         <%= render partial: 'form', locals: { f: f, wiki: @wiki } %>
+        <% if current_user && current_user.premium? %>
+          <%= render partial: 'form', locals: { f: f, wiki: @wiki } %>
+          <%= render partial: 'collaborations/form', locals: { f: f, wiki: @wiki, collaborators: @wiki.collaborators } %>
         <% end %>
+
         <p>*You can use markdown in your wiki.
         <small><a href="http://daringfireball.net/projects/markdown/" target="_blank"> Markdown Syntax </a></small> </p>
        <div class="form-group">

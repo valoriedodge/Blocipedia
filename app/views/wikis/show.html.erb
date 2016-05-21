@@ -1,5 +1,13 @@
 <h1><%= markdown(@wiki.title) %></h1>
 <h4><%= markdown(@wiki.body) %></h4>
+
+<div>
+<% if @wiki.private? %>
+Collaborators:
+<%= render partial: "collaborations/list", locals: { collaborators: @wiki.collaborators } %>
+<% end %>
+</div>
+
 <div>
   <%= link_to "Edit Wiki", edit_wiki_path(@wiki), class: 'btn btn-success' %>
   <%= link_to "Delete Wiki", [@wiki], method: :delete, class: 'btn btn-danger', data: {confirm: 'Are you sure you want to delete this wiki?'} %>
