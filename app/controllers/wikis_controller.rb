@@ -1,26 +1,14 @@
 class WikisController < ApplicationController
   before_action :require_sign_in, except: [:index, :show]
+  before_action :authorized, only: [:show, :edit]
   before_action :authorize_user, only: [:destroy]
 
   def index
     @wikis = policy_scope(Wiki)
-    #if current_user
-    #  @wikis = Wiki.visible_to(current_user)
-    #else
-    #  @wikis = Wiki.where(private: false)
-    #end
   end
 
   def show
     @wiki = Wiki.find(params[:id])
-    unless !@wiki.private
-      if authorized
-        @wiki = Wiki.find(params[:id])
-      else
-        flash[:alert] = "You must be authorized to view private wikis."
-        redirect_to wikis_path
-      end
-    end
   end
 
   def new
@@ -47,14 +35,6 @@ class WikisController < ApplicationController
 
   def edit
     @wiki = Wiki.find(params[:id])
-    unless !@wiki.private
-      if authorized
-        @body = Redcarpet::Markdown.new(Redcarpet::Render::HTML).render(@wiki.body)
-      else
-        flash[:alert] = "You must be authorized to edit private wikis."
-        redirect_to wikis_path
-      end
-    end
   end
 
   def update
@@ -75,7 +55,6 @@ class WikisController < ApplicationController
 
   def destroy
     @wiki = Wiki.find(params[:id])
-
     if @wiki.destroy
           flash[:notice] = "\"#{@wiki.title}\" was deleted successfully."
           redirect_to wikis_path
@@ -86,14 +65,6 @@ class WikisController < ApplicationController
   end
 
   private
-
-  def authorized
-    if current_user && (current_user.admin? || @wiki.creator = current_user || @wiki.collaborators.include?(current_user) )
-      return true
-    else
-      return false
-    end
-  end
 
   def wiki_params
       params.require(:wiki).permit(:title, :body, :private)

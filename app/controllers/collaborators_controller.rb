@@ -8,6 +8,6 @@ class CollaboratorsController < ApplicationController
         else
             flash[:alert] = "Deleting collaborator failed."
         end
-        redirect_to @wiki
+        redirect_to wikis_path
     end
 end

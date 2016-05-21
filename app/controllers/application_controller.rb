@@ -12,6 +12,16 @@ class ApplicationController < ActionController::Base
       end
   end
 
+  def authorized
+    wiki = Wiki.find(params[:id])
+    if wiki.private
+      unless current_user && (current_user.admin? || wiki.creator == current_user || wiki.collaborators.include?(current_user))
+        flash[:alert] = "You must be an authorized to do that."
+        redirect_to wikis_path
+      end
+    end
+  end
+
   def authorize_user
       wiki = Wiki.find(params[:id])
       unless current_user == wiki.creator || current_user.admin?
