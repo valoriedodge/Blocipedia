@@ -11,4 +11,12 @@ class ApplicationController < ActionController::Base
           redirect_to new_user_session_path
       end
   end
+
+  def authorize_user
+      wiki = Wiki.find(params[:id])
+      unless current_user == wiki.creator || current_user.admin?
+          flash[:alert] = "You must be an admin to do that."
+          redirect_to wikis_path
+      end
+  end
 end

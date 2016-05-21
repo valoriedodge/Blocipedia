@@ -2,7 +2,7 @@
 <% unless @wiki.collaborators.empty?  %>
   <% @wiki.collaborators.each do |collaborator| %>
   <%= collaborator.email %>
-  <%#= link_to "Remove Collaborator", wiki_collaborator_path(@wiki, collaborator), method: :delete, class: 'small', data: {confirm: 'Are you sure you want to delete this collaborator?'} %> <br/>
+  <%= link_to "Remove Collaborator", remove_wiki_collaborator_path(@wiki, id: collaborator.id), method: :put, class: 'small', data: {confirm: 'Are you sure you want to delete this collaborator?'} %> <br/>
   <%  end %>
 <% end %>
 </div>

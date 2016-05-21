@@ -77,7 +77,7 @@ RSpec.describe WikisController, type: :controller do
     describe "DELETE destroy" do
         it "returns http redirect" do
             delete :destroy, {id: my_wiki.id}
-            expect(response).to redirect_to(new_user_session_path)
+            expect(response).to redirect_to(wikis_path)
         end
     end
 
@@ -210,13 +210,13 @@ RSpec.describe WikisController, type: :controller do
 
   describe "DELETE destroy" do
     it "deletes the wiki" do
-      delete :destroy, id: my_wiki.id
+      delete :destroy, id: my_wiki.id, creator: user
       count = Wiki.where(id: my_wiki.id).size
       expect(count).to eq(0)
     end
 
     it "redirects to the index view" do
-      delete :destroy, id: my_wiki.id
+      delete :destroy, id: my_wiki.id, creator: user
       expect(response).to redirect_to wikis_path
     end
   end
@@ -224,8 +224,8 @@ RSpec.describe WikisController, type: :controller do
   describe "scopes" do
      before do
        @user = User.new(email: "user@example.com", password: "password")
-       @public_wiki = Wiki.create!(title: RandomData.random_sentence, body: RandomData.random_paragraph, private: false, user: @user)
-       @private_wiki = Wiki.create!(title: RandomData.random_sentence, body: RandomData.random_paragraph, private: true, user: @user)
+       @public_wiki = Wiki.create!(title: RandomData.random_sentence, body: RandomData.random_paragraph, private: false, creator: @user)
+       @private_wiki = Wiki.create!(title: RandomData.random_sentence, body: RandomData.random_paragraph, private: true, creator: @user)
      end
 
      describe "visible_to(user)" do

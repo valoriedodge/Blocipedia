@@ -2,7 +2,7 @@
 <h4><%= markdown(@wiki.body) %></h4>
 
 <div>
-<% if @wiki.private? %>
+<% if @wiki.private? && !@wiki.collaborators.empty?%>
 Collaborators:
 <%= render partial: "collaborations/list", locals: { collaborators: @wiki.collaborators } %>
 <% end %>

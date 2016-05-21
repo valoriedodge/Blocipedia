@@ -1,5 +1,6 @@
 class WikisController < ApplicationController
   before_action :require_sign_in, except: [:index, :show]
+  before_action :authorize_user, only: [:destroy]
 
   def index
     @wikis = policy_scope(Wiki)
@@ -13,7 +14,7 @@ class WikisController < ApplicationController
   def show
     @wiki = Wiki.find(params[:id])
     unless !@wiki.private
-      if (current_user.admin? || @wiki.creator = current_user || @wiki.collaborators.include?(current_user))
+      if authorized
         @wiki = Wiki.find(params[:id])
       else
         flash[:alert] = "You must be authorized to view private wikis."
@@ -31,8 +32,6 @@ class WikisController < ApplicationController
     @wiki.assign_attributes(wiki_params)
     @wiki.creator = current_user
     collaborator = User.find_by_email(params[:collaborator_email])
-    #collaborator = User.find_by_email(:collaborators)
-    #@wiki.collaborators = []
 
     if @wiki.save
       if collaborator
@@ -47,10 +46,9 @@ class WikisController < ApplicationController
   end
 
   def edit
-
     @wiki = Wiki.find(params[:id])
     unless !@wiki.private
-      if (current_user.admin? || @wiki.creator = current_user || @wiki.collaborators.include?(current_user) )
+      if authorized
         @body = Redcarpet::Markdown.new(Redcarpet::Render::HTML).render(@wiki.body)
       else
         flash[:alert] = "You must be authorized to edit private wikis."
@@ -63,14 +61,11 @@ class WikisController < ApplicationController
     @wiki = Wiki.find(params[:id])
     @wiki.assign_attributes(wiki_params)
     collaborator = User.find_by_email(params[:collaborator_email])
-    #collaborator = User.find_by_email(:email)
-    #@wiki.collaborators = []
 
     if @wiki.save
       if collaborator && !@wiki.collaborators.include?(collaborator)
         @wiki.collaborators << collaborator
       end
-      #@wiki.collaborators << Collaboration.update_collaborators(params[:wiki][:collaborators])
       flash[:notice] = "\"#{@wiki.title}\" was updated successfully."
     else
       flash.now[:alert] = "There was an error updating the wiki."
@@ -79,13 +74,7 @@ class WikisController < ApplicationController
   end
 
   def destroy
-
-    #if (current_user.admin? || @wiki.creator = current_user )
-        @wiki = Wiki.find(params[:id])
-    #else
-    #    flash[:alert] = "You must be authorized to delete other wikis."
-    #    redirect_to wikis_path
-    #end
+    @wiki = Wiki.find(params[:id])
 
     if @wiki.destroy
           flash[:notice] = "\"#{@wiki.title}\" was deleted successfully."
@@ -97,6 +86,14 @@ class WikisController < ApplicationController
   end
 
   private
+
+  def authorized
+    if current_user && (current_user.admin? || @wiki.creator = current_user || @wiki.collaborators.include?(current_user) )
+      return true
+    else
+      return false
+    end
+  end
 
   def wiki_params
       params.require(:wiki).permit(:title, :body, :private)

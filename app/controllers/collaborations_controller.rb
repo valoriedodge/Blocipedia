@@ -1,3 +1,0 @@
-class CollaborationsController < ApplicationController
-  
-end

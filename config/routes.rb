@@ -3,6 +3,14 @@ Rails.application.routes.draw do
 
   resources :wikis
 
+  resources :wikis, only: [] do
+    resources :collaborators, only: [] do
+      member do
+        put :remove
+      end
+    end
+  end
+
   devise_for :users
 
   resources :users, only: [] do
