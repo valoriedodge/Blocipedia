@@ -3,8 +3,8 @@ require 'rails_helper'
 RSpec.describe User, type: :model do
   let(:user) { User.create!(email: "user@example.com", password: "password")}
 
-  it { is_expected.to have_many(:wikis) }
-  it { is_expected.to have_many(:wikis).through(:collaborations) }
+  it { is_expected.to have_many(:created_wikis) }
+  it { is_expected.to have_many(:collaborating_wikis).through(:collaborations) }
 
   describe "attributes" do
     it "has an email and password"do
@@ -93,8 +93,8 @@ RSpec.describe User, type: :model do
   describe "downgrade user" do
 
       let(:my_user) { User.create!(email: "my_user@example.com", password: "password", role: "premium")}
-      let(:my_wiki) { Wiki.create!(title: "New Wiki Title", body: "New Wiki Body", private: false, user: my_user) }
-      let(:my_private_wiki) { Wiki.create!(title: "New Wiki Title", body: "New Wiki Body", private: true, user: my_user) }
+      let(:my_wiki) { Wiki.create!(title: "New Wiki Title", body: "New Wiki Body", private: false, creator: my_user) }
+      let(:my_private_wiki) { Wiki.create!(title: "New Wiki Title", body: "New Wiki Body", private: true, creator: my_user) }
 
       it "should change role from premium to standard" do
           expect(my_user.role).to eq("premium")
@@ -121,7 +121,7 @@ RSpec.describe User, type: :model do
       end
 
       it "keeps all wikis assigned to user" do
-        expect(user.wikis).to eq(Wiki.all)
+        expect(user.created_wikis).to eq(Wiki.all)
       end
 
   end

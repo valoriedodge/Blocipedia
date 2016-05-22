@@ -1,0 +1,28 @@
+%h1 Edit Wiki
+.row
+ .col-md-4
+  = form_for @wiki do |f|
+   .form-group
+    = f.label :title
+    = f.text_field :title, class: 'form-control', placeholder: "Enter wiki title"
+   .form-group
+    = f.label :body
+    = f.text_area :body, rows: 8, class: 'form-control', placeholder: "Enter wiki body"
+   - if (current_user.admin? || (@wiki.creator == current_user && current_user.premium?) || @wiki.collaborators.include?(current_user) )
+    = render partial: 'form', locals: { f: f, wiki: @wiki }
+    = render partial: 'collaborations/form', locals: { f: f, wiki: @wiki, collaborators: @wiki.collaborators }
+   %p
+    *You can use markdown in your wiki.</br>
+    %small
+     %a{:href => "http://daringfireball.net/projects/markdown/", :target =>"_blank"} Markdown Syntax
+   .form-group
+    = f.submit "Save", class: 'btn btn-success'
+    = link_to "Back to Wikis", wikis_path, class: 'btn'
+ .col-md-4
+  = form_for @wiki do |f|
+   .form-group
+    = f.label :title
+    = markdown(@wiki.title)
+   .form-group
+    = f.label :body
+    = markdown(@wiki.body)

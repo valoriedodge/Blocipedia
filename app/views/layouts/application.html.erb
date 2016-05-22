@@ -22,7 +22,7 @@
        <% if current_user.standard? %>
           <%= link_to 'Upgrade to Premium', new_charge_path, :class => 'navbar-link' %>
        <% elsif current_user.premium? %>
-          <%= link_to 'Cancel Premium Membership', downgrade_user_path(current_user), :class => 'navbar-link', method: :put, data: {confirm: 'Are you sure you want to cancel your premium membership? All of your private wikis will be made public.'}%>
+          <%= link_to 'Cancel Premium Membership', downgrade_user_path(current_user), :class => 'navbar-link', method: :put, data: {confirm: 'Are you sure you want to cancel your premium membership? All of your private wikis will be made'}%>
        <% end %> -
        <%= link_to "Sign Out", destroy_user_session_path, method: :delete, :class => 'navbar-link'  %>
    <% else %>
