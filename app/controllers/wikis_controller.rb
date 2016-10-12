@@ -1,9 +1,13 @@
 class WikisController < ApplicationController
-  before_action :require_sign_in, except: [:index, :show]
+  before_action :require_sign_in, except: [:public, :show]
   before_action :authorized, only: [:show, :edit, :update]
   before_action :authorize_user, only: [:destroy]
 
   def index
+    @wikis = policy_scope(Wiki)
+  end
+
+  def public
     @wikis = policy_scope(Wiki)
   end
 

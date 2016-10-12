@@ -1,11 +1,64 @@
 @import "bootstrap-sprockets";
 @import "bootstrap";
 .user-info {
-  margin-top: 9px;
+  margin-top: 14px;
+  margin-right: 10px;
+  text-align: right;
 }
 
 .nav {
-  margin-top: 5px;
+  border-bottom: none;
+}
+.main {
+  width: 100%;
+  text-align: center;
+  color: #331a00;
+  margin: -75px auto;
+}
+
+.heading {
+  margin: 100px auto 50px;
+  font-family: 'Archivo Black', sans-serif;
+  color: #ffa64d;
+  font-size: 160px;
+}
+
+.subheading {
+  color: #ffa64d;
+  font-size: 30px;
+}
+
+.why {
+  background-color: #336699;
+  width: 100%;
+  height: 450px;
+  margin: 50px 0px;
+  padding: 40px 20px;
+  color: white;
+}
+
+.why p, .premium p{
+  font-size: 16px;
+}
+
+.premium {
+  background-color: #ffa64d;
+  width: 100%;
+  height: 450px;
+  margin: 50px 0px;
+  padding: 40px 20px;
+  color: white;
+}
+
+.start {
+  color: #336699;
+  text-align: center;
+  width: 100%;
+  margin-bottom: 80px;
+}
+
+.start a:hover {
+  text-decoration: none;
 }
 
 tr:nth-child(even) {background-color: #f2f2f2}
@@ -29,18 +82,24 @@ td {
   display: block;
   padding: 20px;
 }
-/*
- * This is a manifest file that'll be compiled into application.css, which will include all the files
- * listed below.
- *
- * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
- * or any plugin's vendor/assets/stylesheets directory can be referenced here using a relative path.
- *
- * You're free to add application-wide styles to this file and they'll appear at the bottom of the
- * compiled file so the styles you add here take precedence over styles defined in any styles
- * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
- * file per style scope.
- *
- *= require_tree .
- *= require_self
- */
+
+.nav-tabs li a:hover {
+  background-color: #ffbf80;
+  border-radius: 0px;
+}
+.nav-tabs .logo a:hover {
+  background-color: #ffa64d;
+}
+.nav-tabs li.logo {
+  background-color: #ffa64d;
+  font-family: 'Archivo Black', sans-serif;
+  color: white;
+}
+.nav-tabs .logo a {
+  color: white
+}
+
+.ion {
+     font-size: 8rem;
+     margin: 15px auto;
+ }

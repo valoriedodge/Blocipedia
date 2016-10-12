@@ -19,6 +19,7 @@ Rails.application.routes.draw do
     end
   end
 
+  get 'public_wikis' => 'wikis#public'
   get 'about' => 'welcome#about'
 
   root 'welcome#index'

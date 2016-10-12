@@ -1,2 +1,33 @@
-%h1 Blocipedia: Social, Markdown Wikis
-%p Create and Share Markdown Wikis
+.main
+  %p.heading BLOCIPEDIA
+  %p.subheading Create and Share Markdown Wikis
+  .why
+    %h2 WHY BLOCIPEDIA
+    .col-md-4
+      %h3 Easy To Use
+      %span.ion.ion-thumbsup
+      %p BLOCIPEDIA is a simple and efficient way to create content accessible to anyone on the web. Simply sign up for an account and start creating shareable wikis today!
+    .col-md-4
+      %h3 Write in Markdown
+      %span.ion.ion-social-markdown
+      %p BLOCIPEDIA provides the ability for you to conveniently write content in Markdown.
+    .col-md-4
+      %h3 Share Ideas
+      %span.ion.ion-android-bulb
+      %p BLOCIPEDIA allows you to collaborate and share ideas, work, and knowledge with people around the world.
+  .premium
+    %h2 WHY PREMIUM
+    .col-md-4
+      %h3 Make Content Private
+      %span.ion.ion-locked
+      %p BLOCIPEDIA allows you to make your content private- where you have total control over who can access your wikis- with a premium membership.
+    .col-md-4
+      %h3 Add Collaborators
+      %span.ion.ion-android-person-add
+      %p A Premium Membership lets you add and remove collaborators as you see best for your private wikis.
+    .col-md-4
+      %h3 Access Your Work Anywhere
+      %span.ion.ion-android-phone-portrait
+      %p A Premium Membership provides support for you to access your wikis on any device.
+  .start
+    %h2= link_to "GET STARTED!", new_user_registration_path
