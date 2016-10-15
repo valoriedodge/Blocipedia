@@ -4,7 +4,14 @@ class WikisController < ApplicationController
   before_action :authorize_user, only: [:destroy]
 
   def index
-    @wikis = policy_scope(Wiki)
+    user = current_user
+    @wikis = []
+    all_wikis = policy_scope(Wiki)
+    all_wikis.each do |wiki|
+      if wiki.creator == user || wiki.collaborators.include?(user)
+        @wikis << wiki # only show wikis they created, or private wikis they are a collaborator on
+      end
+    end
   end
 
   def public
@@ -12,6 +19,7 @@ class WikisController < ApplicationController
   end
 
   def show
+    @user = current_user
     @wiki = Wiki.find(params[:id])
   end
 

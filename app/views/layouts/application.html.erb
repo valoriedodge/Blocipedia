@@ -11,33 +11,55 @@
 </head>
 <body>
   <div class="container">
-     <ul class="nav nav-tabs">
+    <div class="navbar-collapse collapse">
+     <ul class="nav nav-tabs navbar-left">
        <li class="logo"><%= link_to "BLOCIPEDIA", root_path %></li>
        <li><%= link_to "ALL WIKIS", public_wikis_path %></li>
        <li><%= link_to "MY WIKIS", wikis_path %></li>
-
-  <div class="user-info">
+    </ul>
      <% if user_signed_in? %>
-         Signed in as: <strong><%= current_user.email %></strong> |
-         <%= link_to 'Profile', edit_user_registration_path, :class => 'navbar-link' %> -
-         <% if current_user.standard? %>
-            <%= link_to 'Upgrade to Premium', new_charge_path, :class => 'navbar-link' %>
-         <% elsif current_user.premium? %>
-            <%= link_to 'Cancel Premium Membership', downgrade_user_path(current_user), :class => 'navbar-link', method: :put, data: {confirm: 'Are you sure you want to cancel your premium membership? All of your private wikis will be made'}%>
-         <% end %> -
-         <%= link_to "Sign Out", destroy_user_session_path, method: :delete, :class => 'navbar-link'  %>
+      <ul class="nav nav-tabs navbar-right">
+        <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">SIGNED IN AS: <strong><%= current_user.email %></strong> </a>
+         <ul class="dropdown-menu">
+           <li><%= link_to 'Edit Profile', edit_user_registration_path, :class => 'navbar-link' %></li>
+           <% if current_user.standard? %>
+              <li><%= link_to 'Upgrade to Premium', new_charge_path, :class => 'navbar-link'%></li>
+           <% elsif current_user.premium? %>
+              <li><%= link_to 'Cancel Premium Membership', downgrade_user_path(current_user), :class => 'navbar-link', method: :put, data: {confirm: 'Are you sure you want to cancel your premium membership? All of your private wikis will be made'}%></li>
+           <% end %>
+           <li><%= link_to "Sign Out", destroy_user_session_path, method: :delete, :class => 'navbar-link'  %></li>
+         </ul>
+        </li>
      <% else %>
-        <%= link_to "Sign Up", new_user_registration_path, :class => 'navbar-link'  %> -
-        <%= link_to "Sign In", new_user_session_path, :class => 'navbar-link'  %>
+        <ul class="nav nav-tabs navbar-right">
+          <li class="user-info"><%= link_to "SIGN UP", new_user_registration_path, :class => 'navbar-link'  %></li>
+          <li class="user-info"><%= link_to "SIGN IN", new_user_session_path, :class => 'navbar-link'  %></li>
      <% end %>
+    </ul>
   </div>
-  </ul>
+  <div id="stripeModal" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-sm">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">PREMIUM UPGRADE</h4>
+      </div>
+      <div class="modal-body">
+           <h4>Upgrade to Premium for only $15!</h4>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
 
    <% if flash[:notice] %>
-       <div class="alert alert-success">
+       <!-- <div class="alert alert-success">
          <button type="button" class="close" data-dismiss="alert">&times;</button>
          <%= flash[:notice] %>
-       </div>
+       </div> -->
    <% elsif flash.now[:alert] %>
        <div class="alert alert-danger">
          <button type="button" class="close" data-dismiss="alert">&times;</button>

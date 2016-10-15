@@ -1,11 +1,5 @@
 @import "bootstrap-sprockets";
 @import "bootstrap";
-.user-info {
-  margin-top: 14px;
-  margin-right: 10px;
-  text-align: right;
-}
-
 .nav {
   border-bottom: none;
 }
@@ -22,12 +16,44 @@
   color: #ffa64d;
   font-size: 160px;
 }
+.public_wikis h1 {
+  text-align: center;
+  margin: 80px auto 40px;
+  font-family: 'Archivo Black', sans-serif;
+  color: #336699;
+  font-size: 60px;
+  width: 100%;
+}
 
+.new-wiki-btn {
+  font-size: 16px;
+  text-align: right;
+  width: 100%;
+}
+
+.new-wiki-btn a {
+  padding: 10px;
+}
+.new-wiki-btn a:hover {
+  text-decoration: none;
+  background-color: #ffbf80;
+}
 .subheading {
   color: #ffa64d;
   font-size: 30px;
 }
-
+.wikis {
+  background-color: #ffe6cc;
+  padding: 5px;
+  margin: 15px 0px;
+  border-radius: 3px;
+  overflow: hidden;
+  width: auto;
+}
+.modify {
+  text-align: right;
+  padding: 0px 10px;
+}
 .why {
   background-color: #336699;
   width: 100%;

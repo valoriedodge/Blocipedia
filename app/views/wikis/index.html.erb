@@ -1,0 +1,24 @@
+<div class="public_wikis">
+  <h1>MY WIKIS</h1>
+  <div class="new-wiki-btn">
+    <%= link_to "CREATE NEW WIKI", new_wiki_path %>
+  </div>
+  <div class="wikilist">
+    <% @wikis.each do |wiki|%>
+      <div class="wikis">
+        <div class="col-md-8">
+          <%= link_to markdown(wiki.title), wiki, class: 'wiki-title' %>
+          <% if wiki.body.length > 100 %>
+            <%= markdown(wiki.body)[0, 100] + "..."%>
+          <% else %>
+            <%= markdown(wiki.body)[0, 100] %>
+          <% end %>
+        </div>
+        <div class="modify col-md-4">
+          <%= link_to "EDIT", edit_wiki_path(wiki) %>
+          <%= link_to "DELETE", [wiki], method: :delete, data: {confirm: 'Are you sure you want to delete this wiki?'} %>
+        </div>
+     </div>
+    <% end %>
+  </div>
+</div>

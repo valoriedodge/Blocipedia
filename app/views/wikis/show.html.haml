@@ -7,4 +7,6 @@
   = render partial: "collaborations/list", locals: { collaborators: @wiki.collaborators }
 %div
  = link_to "Edit Wiki", edit_wiki_path(@wiki), class: 'btn btn-success'
- = link_to "Delete Wiki", [@wiki], method: :delete, class: 'btn btn-danger', data: {confirm: 'Are you sure you want to delete this wiki?'}
+ - if @user
+  - if (@wiki.creator == @user) || @user.admin?
+   = link_to "Delete Wiki", [@wiki], method: :delete, class: 'btn btn-danger', data: {confirm: 'Are you sure you want to delete this wiki?'}
